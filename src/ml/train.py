@@ -1,8 +1,7 @@
 from pathlib import Path
-import json
 from ultralytics import YOLO
 
-MODELS = ["yolo26s.pt", "yolo26l.pt"]
+MODELS = ["yolo26l.pt", "yolo26s.pt"]
 DEVICE = "cuda"
 RESULT_DIR = Path("training_results")
 YOLO_YAML_PATH = Path("dataset/BoneFractureYolo8/data.yaml")
@@ -12,7 +11,4 @@ for model_name in MODELS:
     model = YOLO(model_name)
 
     # Train the model
-    results = model.train(data=YOLO_YAML_PATH, epochs=100, device=DEVICE)
-    json.dump(
-        dict(results), open(str(RESULT_DIR / model_name) + ".json", "w+"), indent="\t"
-    )
+    model.train(data=YOLO_YAML_PATH, epochs=100, device=DEVICE)

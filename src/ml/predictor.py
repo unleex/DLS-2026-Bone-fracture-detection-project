@@ -8,17 +8,19 @@ class Predictor:
         for model_name, weights_path in model_to_weights_path.items():
             self.available_models[model_name] = YOLO(weights_path)
 
-        self.model = next(iter(self.available_models.values()))
-
     def __call__(
-        self, input_filenames: str | list[str], output_filenames: str | list[str]
+        self,
+        input_filenames: str | list[str],
+        output_filenames: str | list[str],
+        *,
+        model: str,
     ):
         assert type(input_filenames) is type(output_filenames)
         if isinstance(input_filenames, str):
             input_filenames = [input_filenames]
             output_filenames = [output_filenames]
 
-        results: list[Results] = self.model(input_filenames)
+        results: list[Results] = self.available_models[model](input_filenames)
         for result, output_filename in zip(results, output_filenames, strict=True):
             result.show()
 

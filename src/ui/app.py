@@ -8,11 +8,14 @@ API = "http://127.0.0.1:8000"
 
 st.title("Bad to the backbone")
 
-username = st.text_input("Username")
 TMP_DIR = Path("tmp")
 TMP_DIR.mkdir(exist_ok=True)
 
-# Upload files
+# Settings
+with st.sidebar:
+    selected_model = st.radio("Model:", ("Fast", "Pro"))
+
+# File upload
 with st.container():
     col_up, col_btn = st.columns([4, 1])
     with col_up:
@@ -22,6 +25,7 @@ with st.container():
             accept_multiple_files=True,
             # key=f"uploader_{st.session_state.uploader_key}",
         )
+# Run detection
 if st.button("Run!"):
     for file in uploaded_files:
         savepath = TMP_DIR / file.name
@@ -30,12 +34,7 @@ if st.button("Run!"):
 
         r = requests.post(
             f"{API}/compute",
-            json={
-                "username": username,
-                "filename": str(savepath),
-            },
+            json={"filename": str(savepath), "model": selected_model},
         )
-        image_zoom(Image.open(r.json()["output_filename"]), mode="both")
-
-
-st.divider()
+        with st.expander(label=str(savepath), expanded=True):
+            image_zoom(Image.open(r.json()["output_filename"]), mode="both")

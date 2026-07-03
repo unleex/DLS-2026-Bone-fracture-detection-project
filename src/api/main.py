@@ -10,10 +10,10 @@ from api.schemas import QueryRequest
 Base.metadata.create_all(engine)
 
 OUTPUT_FILE_POSTFIX = "_processed"
-MODELS = {"small": "runs/detect/train-5/weights/best.pt"}
+AVAILABLE_MODELS = {"Pro": "runs/detect/train-10/weights/best.pt"}
 
 app = FastAPI()
-predictor = Predictor(MODELS)
+predictor = Predictor(AVAILABLE_MODELS)
 
 
 @app.get("/")
@@ -27,11 +27,10 @@ def compute(request: QueryRequest):
     db: Session = SessionLocal()
 
     row = Query(
-        username=request.username,
         input_filename=request.filename,
         output_filename=request.filename + OUTPUT_FILE_POSTFIX,
     )
-    predictor(row.input_filename, row.output_filename)
+    predictor(row.input_filename, row.output_filename, model=request.model)
     db.add(row)
     db.commit()
     db.refresh(row)
