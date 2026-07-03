@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from database import Base
+from database.database import Base
 
 
 class Query(Base):
@@ -13,4 +13,3 @@ class Query(Base):
     input_filename = Column(String)
 
     output_filename = Column(String)
-

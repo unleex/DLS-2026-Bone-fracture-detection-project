@@ -3,9 +3,9 @@ from ml.predictor import Predictor
 from fastapi import FastAPI
 from sqlalchemy.orm import Session
 
-from database import Base, SessionLocal, engine
-from models import Query
-from schemas import QueryRequest
+from database.database import Base, SessionLocal, engine
+from api.models import Query
+from api.schemas import QueryRequest
 
 Base.metadata.create_all(engine)
 

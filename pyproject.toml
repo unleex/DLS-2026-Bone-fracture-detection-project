@@ -1,0 +1,8 @@
+[project]
+name = "bone-fracture-detection"
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.11"
+dynamic = ["dependencies"]
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}

@@ -1,4 +1,5 @@
-import logging
+from PIL import Image
+from streamlit_image_zoom import image_zoom
 from pathlib import Path
 import requests
 import streamlit as st
@@ -34,7 +35,7 @@ if st.button("Run!"):
                 "filename": str(savepath),
             },
         )
-        st.image(r.json()["output_filename"])
+        image_zoom(Image.open(r.json()["output_filename"]), mode="both")
 
 
 st.divider()
