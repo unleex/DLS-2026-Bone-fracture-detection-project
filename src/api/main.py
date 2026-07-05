@@ -21,8 +21,8 @@ def root():
     return {"status": "running"}
 
 
-@app.post("/compute")
-def compute(request: QueryRequest):
+@app.post("/predict")
+def predict(request: QueryRequest):
 
     db: Session = SessionLocal()
 
@@ -30,7 +30,14 @@ def compute(request: QueryRequest):
         input_filename=request.filename,
         output_filename=request.filename + OUTPUT_FILE_POSTFIX,
     )
-    predictor(row.input_filename, row.output_filename, model=request.model)
+    result = predictor(
+        row.input_filename,
+        row.output_filename,
+        model=request.model,
+        classes=request.classes,
+    )
+    detected = [result.names[idx] for idx in result.boxes.cls]
+
     db.add(row)
     db.commit()
     db.refresh(row)
@@ -38,9 +45,9 @@ def compute(request: QueryRequest):
 
     return {
         "id": row.id,
-        "username": row.username,
         "input_filename": row.input_filename,
         "output_filename": row.output_filename,
+        "detected": detected,
     }
 
 

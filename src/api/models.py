@@ -8,8 +8,6 @@ class Query(Base):
 
     id = Column(Integer, primary_key=True)
 
-    username = Column(String)
-
     input_filename = Column(String)
 
     output_filename = Column(String)
