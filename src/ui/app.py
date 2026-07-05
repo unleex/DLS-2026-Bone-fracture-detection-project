@@ -4,12 +4,16 @@ from pathlib import Path
 import requests
 import streamlit as st
 
-API = "http://127.0.0.1:8000"
+API = "http://127.0.0.1:8001"
 
-st.title("Bad to the backbone")
+st.title("Aerial object detection")
 
 TMP_DIR = Path("tmp")
 TMP_DIR.mkdir(exist_ok=True)
+
+
+if "uploader_key" not in st.session_state:
+    st.session_state.uploader_key = 0
 
 # Settings
 with st.sidebar:
@@ -23,18 +27,22 @@ with st.container():
             "Upload files",
             type=["jpg", "png", "jpeg"],
             accept_multiple_files=True,
-            # key=f"uploader_{st.session_state.uploader_key}",
+            key=f"uploader_{st.session_state.uploader_key}",
         )
 # Run detection
 if st.button("Run!"):
-    for file in uploaded_files:
+    st.session_state.uploader_key += 1
+    progress_bar = st.progress(0)
+    for idx, file in enumerate(uploaded_files):
         savepath = TMP_DIR / file.name
         with open(savepath, "wb+") as f:
             f.write(file.getvalue())
-
-        r = requests.post(
-            f"{API}/compute",
-            json={"filename": str(savepath), "model": selected_model},
-        )
-        with st.expander(label=str(savepath), expanded=True):
+        with st.spinner("Detection in progress..."):
+            r = requests.post(
+                f"{API}/compute",
+                json={"filename": str(savepath), "model": selected_model},
+            )
+        progress_bar.progress((idx + 1) / len(uploaded_files))
+        with st.expander(label=file.name, expanded=True):
             image_zoom(Image.open(r.json()["output_filename"]), mode="both")
+    progress_bar.empty()
