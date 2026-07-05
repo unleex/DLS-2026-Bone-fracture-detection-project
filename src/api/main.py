@@ -34,9 +34,7 @@ def predict(request: QueryRequest):
         row.input_filename,
         row.output_filename,
         model=request.model,
-        classes=request.classes,
     )
-    detected = [result.names[idx.item()] for idx in result.boxes.cls]
 
     db.add(row)
     db.commit()
@@ -47,5 +45,5 @@ def predict(request: QueryRequest):
         "id": row.id,
         "input_filename": row.input_filename,
         "output_filename": row.output_filename,
-        "detected": detected,
+        "results": result.to_json(),
     }

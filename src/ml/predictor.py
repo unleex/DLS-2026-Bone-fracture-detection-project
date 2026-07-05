@@ -14,16 +14,13 @@ class Predictor:
         output_filenames: str | list[str],
         *,
         model: str,
-        classes: list[int],
     ) -> Results | list[Results]:
         assert type(input_filenames) is type(output_filenames)
         if isinstance(input_filenames, str):
             input_filenames = [input_filenames]
             output_filenames = [output_filenames]
 
-        results: list[Results] = self.available_models[model](
-            input_filenames, classes=classes
-        )
+        results: list[Results] = self.available_models[model](input_filenames)
 
         for result, output_filename in zip(results, output_filenames, strict=True):
             result.save(filename=output_filename, line_width=1)
