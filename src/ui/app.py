@@ -60,7 +60,7 @@ with st.container():
 
 # Settings
 with st.sidebar:
-    st.title("Settings")
+    st.title("⚙️ Settings")
 
     selected_model = st.radio("Model:", ("Fast", "Pro"))
 
@@ -100,7 +100,7 @@ if st.button("Run!"):
             )
         if not r.ok:
             print(r)
-            st.error("Internal error occured, try again later")
+            st.error("❌ Internal error occured, try again later")
         # Parse detection results
         response = r.json()
         raw_results = response["results"]
@@ -165,12 +165,12 @@ if st.session_state.results:
         radius=0.7,
     )
     ax.legend(loc=2, prop={"size": 6})
-    with st.expander(label="Statistics", expanded=False):
+    with st.expander(label="🧮 Statistics", expanded=False):
         st.pyplot(ax.figure)
 
     # Display annotated images
     for res, counts in zip(results, detection_counts, strict=True):
-        with st.expander(label=res["original_name"], expanded=True):
+        with st.expander(label="▶️ " + res["original_name"], expanded=True):
             # Load the original, unannotated image
             original_img_path = TMP_DIR / res["original_name"]
             img_np = np.array(Image.open(original_img_path))
