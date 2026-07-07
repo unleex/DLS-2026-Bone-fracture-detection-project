@@ -6,6 +6,6 @@ COPY . .
 
 WORKDIR /
 
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN pip install -e .
 
-CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["sh", "-c", "uvicorn src.api.main:app --host 0.0.0.0 --port  & streamlit run src/ui/app.py"]
