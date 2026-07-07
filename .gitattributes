@@ -1,0 +1,2 @@
+weights/Pro.pt filter=lfs diff=lfs merge=lfs -text
+weights/Fast.pt filter=lfs diff=lfs merge=lfs -text
