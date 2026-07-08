@@ -155,8 +155,9 @@ if st.session_state.results:
     for counts in detection_counts:
         new_counts = pd.DataFrame({"count": counts.values()}, index=counts.keys())
         concatenated = pd.concat([mean_counts, new_counts])
-        mean_counts = concatenated.groupby(level=0).mean(numeric_only=True)
-    print(mean_counts)
+        mean_counts = (
+            pd.DataFrame(detection_counts).fillna(0).mean().to_frame(name="count")
+        )
     total = mean_counts["count"].sum()
     ax = mean_counts.plot.pie(
         "count",
