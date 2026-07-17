@@ -5,6 +5,7 @@ pydantic==2.13.4
 Requests==2.34.2
 SQLAlchemy==2.0.51
 streamlit==1.58.0
+streamlit[charts]
 streamlit_image_zoom==0.0.4
 ultralytics==8.4.84
 opencv-python-headless
