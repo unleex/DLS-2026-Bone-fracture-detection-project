@@ -1,13 +1,9 @@
 from ml.predictor import Predictor, AVAILABLE_MODELS
 
 from fastapi import FastAPI
-from sqlalchemy.orm import Session
 
-from database.database import Base, SessionLocal, engine
-from api.models import Query
 from api.schemas import QueryRequest
 
-Base.metadata.create_all(engine)
 
 OUTPUT_FILE_POSTFIX = "_processed.png"
 
@@ -23,26 +19,13 @@ def root():
 @app.post("/predict")
 def predict(request: QueryRequest):
 
-    db: Session = SessionLocal()
-
-    row = Query(
-        input_filename=request.filename,
-        output_filename=request.filename + OUTPUT_FILE_POSTFIX,
-    )
     result = predictor(
-        row.input_filename,
-        row.output_filename,
+        request.filename,
+        request.filename + OUTPUT_FILE_POSTFIX,
         model=request.model,
     )
-
-    db.add(row)
-    db.commit()
-    db.refresh(row)
-    db.close()
-
     return {
-        "id": row.id,
-        "input_filename": row.input_filename,
-        "output_filename": row.output_filename,
+        "input_filename": request.filename,
+        "output_filename": request.filename + OUTPUT_FILE_POSTFIX,
         "results": result.to_json(),
     }

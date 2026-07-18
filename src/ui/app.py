@@ -16,7 +16,7 @@ import atexit
 
 API = "http://0.0.0.0:8000"
 
-st.title("Aerial image analysis AI")
+st.title("Aerial transport detection AI")
 
 # Create a unique subfolder for this specific tab session
 if "session_id" not in st.session_state:
@@ -28,8 +28,8 @@ TMP_DIR = Path("tmp") / st.session_state.session_id
 @st.cache_resource
 def register_cleanup():
     # Clear the tmp directory on startup
-    if TMP_DIR.exists():
-        shutil.rmtree(TMP_DIR)
+    if Path("tmp").exists():
+        shutil.rmtree("tmp")
     TMP_DIR.mkdir(parents=True, exist_ok=True)
     # Cleanup on a graceful shutdown (Ctrl+C, SIGTERM)
     atexit.register(lambda: shutil.rmtree("tmp", ignore_errors=True))
@@ -62,6 +62,7 @@ if "results" not in st.session_state:
 def clear_uploader():
     st.session_state.uploader_key += 1
     st.session_state.results = []
+    # Clear session's tmp folder
     shutil.rmtree(TMP_DIR)
     TMP_DIR.mkdir()
 
