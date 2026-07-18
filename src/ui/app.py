@@ -1,5 +1,3 @@
-import io
-import zipfile
 import detection_stats
 from collections import Counter
 import json
@@ -23,6 +21,7 @@ if "session_id" not in st.session_state:
     st.session_state.session_id = str(uuid.uuid4())
 
 TMP_DIR = Path("tmp") / st.session_state.session_id
+TMP_DIR.mkdir(parents=True, exist_ok=True)
 
 
 @st.cache_resource
@@ -30,6 +29,7 @@ def register_cleanup():
     # Clear the tmp directory on startup
     if Path("tmp").exists():
         shutil.rmtree("tmp")
+    Path("tmp").mkdir()
     TMP_DIR.mkdir(parents=True, exist_ok=True)
     # Cleanup on a graceful shutdown (Ctrl+C, SIGTERM)
     atexit.register(lambda: shutil.rmtree("tmp", ignore_errors=True))
@@ -88,7 +88,13 @@ with st.sidebar:
     st.title("⚙️ Settings")
 
     selected_model = st.radio("Model:", ("Fast", "Pro"))
-
+    # If model has changed
+    if (
+        "selected_model" in st.session_state
+        and st.session_state.selected_model != selected_model
+    ):
+        st.session_state.results = []  # Redetect with new model
+    st.session_state.selected_model = selected_model
     selected_classes = st.pills(
         "Select objects to detect:",
         options=list(LABELS.keys()),
