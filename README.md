@@ -9,6 +9,9 @@ pinned: false
 ---
 
 # DLS-2026-Aerial-object-detection-project
+<img width="800" height="450" alt="ezgif-8728f7643aa588d4" src="https://github.com/user-attachments/assets/8d00ad6a-6baa-4253-bf35-47000ae073a6" />
+
+
 This is a web interface for analysing images of transport and people, shot from high-altitude cameras or drones. 
 It allows to easily view statistics of images including average amount of found objects, per-image object counts
 and how does amount of objects change through time in your images.
