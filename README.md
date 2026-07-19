@@ -14,7 +14,6 @@ It allows to easily view statistics of images including average amount of found 
 and how does amount of objects change through time in your images.
 
 
-Deployed app: https://huggingface.co/spaces/unleex/aerial-object-detection
 
 ## Stack
 - **ML:** ![Ultralytics YOLO](https://img.shields.io/badge/Ultralytics%20YOLO-111F68?style=for-the-badge&logo=ai&logoColor=white)
@@ -42,6 +41,10 @@ Deployed app: https://huggingface.co/spaces/unleex/aerial-object-detection
 | **Inference time per image** | 4340.6ms | 1046.5ms |
 
 ## How to Run
+
+App is deployed here: https://huggingface.co/spaces/unleex/aerial-object-detection
+
+~~If~~ you have hardware, that is better than the one on free version of HF Spaces, you might want to run the app locally.
 
 ### Docker
 ```bash
